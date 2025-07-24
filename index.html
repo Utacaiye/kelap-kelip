@@ -1,0 +1,72 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>I Love You So Much</title>
+  <style>
+    body {
+      margin: 0;
+      background: black;
+      overflow: hidden;
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    .stars {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: url('https://i.imgur.com/YWnhsYz.png') repeat;
+      animation: moveStars 100s linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes moveStars {
+      0% { background-position: 0 0; }
+      100% { background-position: -10000px 5000px; }
+    }
+
+    .love-text {
+      position: absolute;
+      color: #00ffff;
+      font-size: 1.2em;
+      text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff;
+      white-space: nowrap;
+      user-select: none;
+      animation: floatText 20s linear infinite;
+    }
+
+    @keyframes floatText {
+      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="stars"></div>
+
+  <script>
+    const phrases = [
+      "I love you so much 🤍",
+      "I love you so much 🤍",
+      "I love you so much 🤍",
+      "I love you so much 🤍",
+      "I love you so much 🤍"
+    ];
+
+    for (let i = 0; i < 30; i++) {
+      const text = document.createElement('div');
+      text.classList.add('love-text');
+      text.style.left = Math.random() * 100 + "vw";
+      text.style.top = Math.random() * 100 + "vh";
+      text.style.fontSize = (Math.random() * 1.5 + 0.8) + "em";
+      text.style.animationDuration = (Math.random() * 10 + 10) + "s";
+      text.innerText = phrases[Math.floor(Math.random() * phrases.length)];
+      document.body.appendChild(text);
+    }
+  </script>
+</body>
+</html>
