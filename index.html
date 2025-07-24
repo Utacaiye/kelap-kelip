@@ -116,7 +116,10 @@
     function startAnimations() {
       document.getElementById('startButton').style.display = 'none';
       document.getElementById('photoStage').style.display = 'block';
-      document.getElementById('bgMusic').play();
+      const audio = document.getElementById('birthdayAudio');
+      audio.play().catch(err => {
+        console.log("Autoplay diblokir browser:", err);
+      });
 
       for (let i = 0; i < 20; i++) {
         const text = document.createElement('div');
@@ -145,16 +148,6 @@
     }
 
     document.getElementById('startButton').addEventListener('click', startAnimations);
-
-    function startPresentation() {
-      document.getElementById('introScreen').classList.remove('active');
-      slides[0].classList.add('active');
-
-      const audio = document.getElementById('birthdayAudio');
-      audio.play().catch(err => {
-        console.log("Autoplay diblokir browser:", err);
-      });
-    }
   </script>
 </body>
 </html>
