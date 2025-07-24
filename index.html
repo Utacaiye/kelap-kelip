@@ -114,9 +114,10 @@
       document.getElementById('startButton').style.display = 'none';
       document.getElementById('photoStage').style.display = 'block';
        const audio = document.getElementById('bgMusic');
-      audio.play().catch(err => {
-        console.log("Autoplay diblokir browser:", err);
-      });
+audio.load();
+audio.play().catch(err => {
+  console.log("Autoplay diblokir browser:", err);
+});
 
       for (let i = 0; i < 20; i++) {
         const text = document.createElement('div');
