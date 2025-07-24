@@ -80,8 +80,11 @@
   </style>
 </head>
 <body>
-  <audio id="bgMusic" src="a/b.mpeg" type="audio/mpeg"></audio>
-  <button id="startButton">Mulai</button>
+  <audio id="birthdayAudio" loop>
+    <source src="a/b.mpeg" type="audio/mpeg">
+    Browser kamu tidak mendukung audio.
+  </audio>
+  <button onclick="startPresentation()">Mulai</button>
 
   <div class="photo-stage" id="photoStage">
     <img src="f/p1.jpeg" class="photo active" />
@@ -142,6 +145,16 @@
     }
 
     document.getElementById('startButton').addEventListener('click', startAnimations);
+
+    function startPresentation() {
+      document.getElementById('introScreen').classList.remove('active');
+      slides[0].classList.add('active');
+
+      const audio = document.getElementById('birthdayAudio');
+      audio.play().catch(err => {
+        console.log("Autoplay diblokir browser:", err);
+      });
+    }
   </script>
 </body>
 </html>
