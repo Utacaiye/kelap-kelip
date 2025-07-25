@@ -10,6 +10,7 @@
       background: black;
       overflow: hidden;
       font-family: 'Courier New', Courier, monospace;
+      touch-action: manipulation;
     }
 
     .photo-stage {
@@ -17,8 +18,9 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 400px;
-      height: 300px;
+      width: 90vw;
+      max-width: 400px;
+      height: 280px;
       display: none;
       z-index: 1;
     }
@@ -44,7 +46,7 @@
     .love-text {
       position: absolute;
       color: #00ffff;
-      font-size: 1.2em;
+      font-size: 1em;
       text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff;
       white-space: nowrap;
       user-select: none;
@@ -68,7 +70,7 @@
       left: 50%;
       transform: translate(-50%, -50%);
       padding: 20px 40px;
-      font-size: 1.5em;
+      font-size: 1.2em;
       color: white;
       background-color: #ff0080;
       border: none;
@@ -84,7 +86,8 @@
     <source src="a/m.mp4" type="audio/mpeg">
     Browser kamu tidak mendukung audio.
   </audio>
- <button onclick="startPresentation()">Mulai</button>
+
+  <button id="startButton" onclick="startPresentation()">Mulai</button>
 
   <div class="photo-stage" id="photoStage">
     <img src="f/p1.jpeg" class="photo active" />
@@ -113,12 +116,13 @@
       return pos;
     }
 
-    function startAnimations() {
-      document.getElementById('startPresentation').style.display = 'none';
+    function startPresentation() {
+      document.getElementById('startButton').style.display = 'none';
       document.getElementById('photoStage').style.display = 'block';
+
       const audio = document.getElementById('bgMusic');
       audio.play().catch(err => {
-      console.log("Autoplay diblokir browser:", err);
+        console.log("Autoplay diblokir browser:", err);
       });
 
       for (let i = 0; i < 20; i++) {
@@ -127,8 +131,8 @@
         const direction = directions[Math.floor(Math.random() * directions.length)];
         text.classList.add(direction);
 
-        const left = getUniquePosition(window.innerWidth - 320, 100);
-        const top = getUniquePosition(window.innerHeight - 250, 60);
+        const left = getUniquePosition(window.innerWidth - 200, 100);
+        const top = getUniquePosition(window.innerHeight - 100, 60);
         text.style.left = left + "px";
         text.style.top = top + "px";
         text.style.fontSize = (Math.random() * 1.2 + 1) + "em";
@@ -146,8 +150,6 @@
         current = (current + 1) % photos.length;
       }, 4000);
     }
-
-    document.getElementById('startPresentation').addEventListener('click', startAnimations);
   </script>
 </body>
 </html>
