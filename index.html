@@ -80,8 +80,11 @@
   </style>
 </head>
 <body>
-  <audio id="bgMusic" src="a/m.mp4" type="audio/mpeg"></audio>
-  <button id="startButton">Mulai</button>
+  <audio id="bgMusic" loop>
+    <source src="a/m.mp4" type="audio/mpeg">
+    Browser kamu tidak mendukung audio.
+  </audio>
+ <button onclick="startPresentation()">Mulai</button>
 
   <div class="photo-stage" id="photoStage">
     <img src="f/p1.jpeg" class="photo active" />
@@ -111,13 +114,12 @@
     }
 
     function startAnimations() {
-      document.getElementById('startButton').style.display = 'none';
+      document.getElementById('startPresentation').style.display = 'none';
       document.getElementById('photoStage').style.display = 'block';
-       const audio = document.getElementById('bgMusic');
-audio.load();
-audio.play().catch(err => {
-  console.log("Autoplay diblokir browser:", err);
-});
+      const audio = document.getElementById('bgMusic');
+      audio.play().catch(err => {
+      console.log("Autoplay diblokir browser:", err);
+      });
 
       for (let i = 0; i < 20; i++) {
         const text = document.createElement('div');
@@ -145,7 +147,7 @@ audio.play().catch(err => {
       }, 4000);
     }
 
-    document.getElementById('startButton').addEventListener('click', startAnimations);
+    document.getElementById('startPresentation').addEventListener('click', startAnimations);
   </script>
 </body>
 </html>
