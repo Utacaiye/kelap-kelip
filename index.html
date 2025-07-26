@@ -81,7 +81,7 @@
 
     #startButton {
       position: absolute;
-      top: 40%;
+      top: 55%;
       left: 50%;
       transform: translate(-50%, -50%);
       padding: 20px 40px;
@@ -93,6 +93,19 @@
       cursor: pointer;
       z-index: 10;
       box-shadow: 0 0 20px #ff0080;
+    }
+
+    #message {
+      position: absolute;
+      top: 35%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      color: white;
+      font-size: 1.1em;
+      text-align: center;
+      z-index: 10;
+      padding: 0 10px;
     }
 
     #browserWarning {
@@ -121,6 +134,10 @@
     Jika kamu membuka dari Google Lens atau aplikasi lain,<br>
     klik tiga titik ⋮ lalu pilih "Buka di browser"
   </p>
+</div>
+
+<div id="message">
+  hai sayang ku selamat hari sabtu, semangat dan terus happy ya sayang.. oh iyaa maafin aku soal semalem aku sangat membuatmu badmood tapi aku harap kamu sudah memafkan ku kalau ada yg bisa aku lakukan untuk membuat mu membaik lagi katakan.. btw nyuekin akunya jangan lama-lama ya cantik huhu
 </div>
 
 <audio id="bgMusic" loop>
@@ -181,6 +198,7 @@
   function startPresentation() {
     document.getElementById('startButton').style.display = 'none';
     document.getElementById('bgMusic').play().catch(console.warn);
+    document.getElementById('message').style.display = 'none';
 
     // Generate texts
     for (let i = 0; i < 25; i++) {
@@ -214,7 +232,7 @@
       love.style.fontSize = (16 + Math.random() * 20) + "px";
       document.body.appendChild(love);
       setTimeout(() => love.remove(), 5000);
-    }, 300);
+    }, 500);
   }
 </script>
 
