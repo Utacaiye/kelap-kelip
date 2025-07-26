@@ -10,59 +10,55 @@
       background: black;
       overflow: hidden;
       font-family: 'Courier New', Courier, monospace;
-      touch-action: manipulation;
-    }
-
-    .photo-stage {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 90vw;
-      max-width: 400px;
-      height: 280px;
-      display: none;
-      z-index: 1;
-    }
-
-    .photo-stage img {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0;
-      filter: blur(10px);
-      transform: scale(1.2);
-      transition: all 1.5s ease-in-out;
-    }
-
-    .photo-stage img.active {
-      opacity: 1;
-      filter: blur(0);
-      transform: scale(1);
-      z-index: 2;
     }
 
     .love-text {
       position: absolute;
       color: #00ffff;
       font-size: 1em;
-      text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff;
       white-space: nowrap;
       user-select: none;
-      opacity: 0;
-      z-index: 2;
+      animation: rainText 6s linear infinite;
+      text-shadow: 0 0 10px #00ffff;
     }
 
-    @keyframes from-top { 0% { transform: translateY(-100vh); opacity: 0; } 20% { opacity: 1; } 100% { transform: translateY(100vh); opacity: 0; } }
-    @keyframes from-bottom { 0% { transform: translateY(100vh); opacity: 0; } 20% { opacity: 1; } 100% { transform: translateY(-100vh); opacity: 0; } }
-    @keyframes from-left { 0% { transform: translateX(-100vw); opacity: 0; } 20% { opacity: 1; } 100% { transform: translateX(100vw); opacity: 0; } }
-    @keyframes from-right { 0% { transform: translateX(100vw); opacity: 0; } 20% { opacity: 1; } 100% { transform: translateX(-100vw); opacity: 0; } }
+    @keyframes rainText {
+      0% {
+        transform: translateY(-100px);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(120vh);
+        opacity: 0;
+      }
+    }
 
-    .from-top { animation: from-top 20s linear infinite; }
-    .from-bottom { animation: from-bottom 20s linear infinite; }
-    .from-left { animation: from-left 20s linear infinite; }
-    .from-right { animation: from-right 20s linear infinite; }
+    .photo-drop {
+      position: absolute;
+      width: 120px;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+      animation: dropPhoto 8s ease-in-out infinite;
+    }
+
+    @keyframes dropPhoto {
+      0% {
+        transform: translateY(-200px) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(110vh) rotate(10deg);
+        opacity: 0;
+      }
+    }
 
     #startButton {
       position: absolute;
@@ -79,77 +75,104 @@
       z-index: 10;
       box-shadow: 0 0 20px #ff0080;
     }
+
+    #browserWarning {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.9);
+      color: white;
+      font-size: 1.2em;
+      z-index: 100;
+      padding: 30px;
+      text-align: center;
+    }
+
+    #browserWarning p {
+      margin-top: 40vh;
+    }
   </style>
 </head>
 <body>
-  <audio id="bgMusic" loop>
-    <source src="a/m.mp4" type="audio/mpeg">
-    Browser kamu tidak mendukung audio.
-  </audio>
 
-  <button id="startButton" onclick="startPresentation()">Mulai</button>
+<div id="browserWarning">
+  <p>👋 Hai! Untuk pengalaman terbaik:<br>
+    <strong>Silakan buka halaman ini di Chrome atau Safari.</strong><br><br>
+    Jika kamu membuka dari Google Lens atau aplikasi lain,<br>
+    klik tiga titik ⋮ lalu pilih "Buka di browser"
+  </p>
+</div>
 
-  <div class="photo-stage" id="photoStage">
-    <img src="f/p1.jpeg" class="photo active" />
-    <img src="f/p5.jpeg" class="photo" />
-    <img src="f/p3.jpeg" class="photo" />
-    <img src="f/p2.jpeg" class="photo" />
-    <img src="f/p6.jpeg" class="photo" />
-    <img src="f/p4.jpeg" class="photo" />
-  </div>
+<audio id="bgMusic" loop>
+  <source src="a/m.mp4" type="audio/mpeg">
+  Browser kamu tidak mendukung audio.
+</audio>
 
-  <script>
-    const phrases = [
-      "Kamu Cantikkk!!! 😘",
-      "I love you so much 🤗",
-      "i cant stop loving you ❤️"
-    ];
-    const directions = ["from-top", "from-bottom", "from-left", "from-right"];
-    const usedPositions = new Set();
+<button id="startButton" onclick="startPresentation()">Mulai</button>
 
-    function getUniquePosition(max, step) {
-      let pos;
-      do {
-        pos = Math.floor(Math.random() * (max / step)) * step;
-      } while (usedPositions.has(pos) && usedPositions.size < max / step);
-      usedPositions.add(pos);
-      return pos;
+<script>
+  const phrases = [
+    "I love you ❤️",
+    "You're the best! 💖",
+    "Cantiknya kamu 😍",
+    "Selalu di hatiku 💘"
+  ];
+
+  const photos = [
+    "f/p1.jpeg",
+    "f/p2.jpeg",
+    "f/p3.jpeg",
+    "f/p4.jpeg",
+    "f/p5.jpeg",
+    "f/p6.jpeg"
+  ];
+
+  function isInAppBrowser() {
+    const ua = navigator.userAgent.toLowerCase();
+    return (
+      ua.includes('instagram') ||
+      ua.includes('facebook') ||
+      ua.includes('line') ||
+      ua.includes('webview') ||
+      (ua.includes('google') && !ua.includes('chrome'))
+    );
+  }
+
+  window.addEventListener('load', () => {
+    if (isInAppBrowser()) {
+      document.getElementById('browserWarning').style.display = 'block';
+    }
+  });
+
+  function startPresentation() {
+    document.getElementById('startButton').style.display = 'none';
+    document.getElementById('bgMusic').play().catch(console.warn);
+
+    // Generate texts
+    for (let i = 0; i < 25; i++) {
+      const text = document.createElement('div');
+      text.className = 'love-text';
+      text.innerText = phrases[Math.floor(Math.random() * phrases.length)];
+      text.style.left = `${Math.random() * 90}vw`;
+      text.style.top = `-${Math.random() * 200}px`;
+      text.style.fontSize = `${Math.random() * 1.5 + 1}em`;
+      text.style.animationDelay = `${Math.random() * 5}s`;
+      document.body.appendChild(text);
     }
 
-    function startPresentation() {
-      document.getElementById('startButton').style.display = 'none';
-      document.getElementById('photoStage').style.display = 'block';
-
-      const audio = document.getElementById('bgMusic');
-      audio.play().catch(err => {
-        console.log("Autoplay diblokir browser:", err);
-      });
-
-      for (let i = 0; i < 20; i++) {
-        const text = document.createElement('div');
-        text.classList.add('love-text');
-        const direction = directions[Math.floor(Math.random() * directions.length)];
-        text.classList.add(direction);
-
-        const left = getUniquePosition(window.innerWidth - 200, 100);
-        const top = getUniquePosition(window.innerHeight - 100, 60);
-        text.style.left = left + "px";
-        text.style.top = top + "px";
-        text.style.fontSize = (Math.random() * 1.2 + 1) + "em";
-        text.style.animationDelay = (Math.random() * 10) + "s";
-        text.innerText = phrases[Math.floor(Math.random() * phrases.length)];
-
-        document.body.appendChild(text);
-      }
-
-      const photos = document.querySelectorAll('.photo');
-      let current = 0;
-      setInterval(() => {
-        photos.forEach(p => p.classList.remove('active'));
-        photos[current].classList.add('active');
-        current = (current + 1) % photos.length;
-      }, 4000);
+    // Generate photos
+    for (let i = 0; i < photos.length; i++) {
+      const img = document.createElement('img');
+      img.src = photos[i];
+      img.className = 'photo-drop';
+      img.style.left = `${Math.random() * 90}vw`;
+      img.style.top = `-${Math.random() * 400}px`;
+      img.style.animationDelay = `${Math.random() * 6}s`;
+      document.body.appendChild(img);
     }
-  </script>
+  }
+</script>
+
 </body>
 </html>
