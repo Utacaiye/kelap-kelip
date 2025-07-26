@@ -2,131 +2,213 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hujan Teks & Foto</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>I Love You So Much</title>
   <style>
     body {
       margin: 0;
       background: black;
       overflow: hidden;
       font-family: 'Courier New', Courier, monospace;
-      position: relative;
     }
 
     .love-text {
       position: absolute;
-      color: cyan;
-      font-weight: bold;
-      opacity: 0.7;
-      text-shadow: 0 0 10px cyan;
-      animation: fall 6s linear forwards;
-      pointer-events: none;
+      color: #00ffff;
+      font-size: 1em;
+      white-space: nowrap;
+      user-select: none;
+      animation: rainText 6s linear infinite;
+      text-shadow: 0 0 10px #00ffff;
+      z-index: 2;
     }
 
-    @keyframes fall {
+    @keyframes rainText {
       0% {
-        transform: translateY(0);
+        transform: translateY(-100px);
+        opacity: 0;
+      }
+      10% {
         opacity: 1;
       }
       100% {
+        transform: translateY(120vh);
+        opacity: 0;
+      }
+    }
+
+    .photo-drop {
+      position: absolute;
+      width: 120px;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+      animation: dropPhoto 8s ease-in-out infinite;
+      z-index: 1;
+    }
+
+    @keyframes dropPhoto {
+      0% {
+        transform: translateY(-200px) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(110vh) rotate(10deg);
+        opacity: 0;
+      }
+    }
+
+    .love {
+      position: fixed;
+      top: -2em;
+      pointer-events: none;
+      animation: fall 5s linear forwards;
+      opacity: 0.3;
+      filter: blur(1px);
+      z-index: 0;
+    }
+
+    @keyframes fall {
+      to {
         transform: translateY(100vh);
         opacity: 0;
       }
     }
 
-    .foto {
+    #startButton {
       position: absolute;
-      top: 50%;
+      top: 40%;
       left: 50%;
       transform: translate(-50%, -50%);
+      padding: 20px 40px;
+      font-size: 1.2em;
+      color: white;
+      background-color: #ff0080;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
       z-index: 10;
-      border-radius: 1em;
-      box-shadow: 0 0 20px rgba(0,0,0,0.7);
-      overflow: hidden;
+      box-shadow: 0 0 20px #ff0080;
     }
 
-    .foto img {
-      width: 250px;
-      border-radius: 1em;
-    }
-
-    .love {
+    #browserWarning {
+      display: none;
       position: fixed;
-      top: 0;
-      animation: drop 5s linear forwards;
-      opacity: 0.3;
-      pointer-events: none;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.9);
+      color: white;
+      font-size: 1.2em;
+      z-index: 100;
+      padding: 30px;
+      text-align: center;
     }
 
-    @keyframes drop {
-      0% {
-        transform: translateY(-5vh);
-      }
-      100% {
-        transform: translateY(105vh);
-      }
+    #browserWarning p {
+      margin-top: 40vh;
     }
   </style>
 </head>
 <body>
-  <div class="foto">
-    <img src="e7159944-d0a1-42b5-a18a-5dfba467c572.png" alt="Foto Kamu" />
-  </div>
 
-  <script>
-    const phrases = [
-      "You're the best! ❤️✨",
-      "Cantiknya kamu 😍",
-      "Selalu di hati 💘",
-      "I love you ❤️",
-      "Manis senyumnya 💫"
-    ];
+<div id="browserWarning">
+  <p>👋 Hai! Untuk pengalaman terbaik:<br>
+    <strong>Silakan buka halaman ini di Chrome atau Safari.</strong><br><br>
+    Jika kamu membuka dari Google Lens atau aplikasi lain,<br>
+    klik tiga titik ⋮ lalu pilih "Buka di browser"
+  </p>
+</div>
 
-    function avoidPhotoZone(leftPercent) {
-      return leftPercent > 40 && leftPercent < 60;
+<audio id="bgMusic" loop>
+  <source src="a/m.mp4" type="audio/mpeg">
+  Browser kamu tidak mendukung audio.
+</audio>
+
+<button id="startButton" onclick="startPresentation()">Mulai</button>
+
+<script>
+  const phrases = [
+    "I love you ❤️",
+    "You're the best! 💖",
+    "Cantiknya kamu 😍",
+    "Selalu di hatiku 💘"
+  ];
+
+  const photos = [
+    "f/p1.jpeg",
+    "f/p2.jpeg",
+    "f/p3.jpeg",
+    "f/p4.jpeg",
+    "f/p5.jpeg",
+    "f/p6.jpeg"
+  ];
+
+  function isInAppBrowser() {
+    const ua = navigator.userAgent.toLowerCase();
+    return (
+      ua.includes('instagram') ||
+      ua.includes('facebook') ||
+      ua.includes('line') ||
+      ua.includes('webview') ||
+      (ua.includes('google') && !ua.includes('chrome'))
+    );
+  }
+
+  window.addEventListener('load', () => {
+    if (isInAppBrowser()) {
+      document.getElementById('browserWarning').style.display = 'block';
     }
+  });
 
-    function safeLeft() {
-      let left;
+  function startPresentation() {
+    document.getElementById('startButton').style.display = 'none';
+    document.getElementById('bgMusic').play().catch(console.warn);
+
+    // Generate texts (hindari area tengah 30vw - 70vw untuk menghindari tabrakan dengan foto)
+    for (let i = 0; i < 25; i++) {
+      let leftPos;
       do {
-        left = Math.random() * 100;
-      } while (avoidPhotoZone(left));
-      return left + 'vw';
-    }
+        leftPos = Math.random() * 100;
+      } while (leftPos > 30 && leftPos < 70); // Hindari tengah
 
-    // Teks jatuh bertahap
-    let textCount = 0;
-    const maxText = 40;
-    const interval = setInterval(() => {
-      if (textCount >= maxText) {
-        clearInterval(interval);
-        return;
-      }
       const text = document.createElement('div');
       text.className = 'love-text';
       text.innerText = phrases[Math.floor(Math.random() * phrases.length)];
-      text.style.left = safeLeft();
+      text.style.left = `${leftPos}vw`;
       text.style.top = `-${Math.random() * 200}px`;
       text.style.fontSize = `${Math.random() * 1.5 + 1}em`;
+      text.style.animationDelay = `${Math.random() * 5}s`;
       document.body.appendChild(text);
-      textCount++;
-    }, 700);
+    }
 
-    // Efek hati (❤️) latar belakang
-    function createLove() {
+    // Generate photos (jatuh di area tengah 40vw - 60vw)
+    for (let i = 0; i < photos.length; i++) {
+      const img = document.createElement('img');
+      img.src = photos[i];
+      img.className = 'photo-drop';
+      img.style.left = `${40 + Math.random() * 20}vw`;
+      img.style.top = `-${Math.random() * 400}px`;
+      img.style.animationDelay = `${Math.random() * 6}s`;
+      document.body.appendChild(img);
+    }
+
+    // Generate love hearts
+    setInterval(() => {
       const love = document.createElement("div");
       love.classList.add("love");
       love.innerHTML = "❤️";
       love.style.left = Math.random() * 100 + "vw";
       love.style.fontSize = (16 + Math.random() * 20) + "px";
-      love.style.zIndex = 1;
       document.body.appendChild(love);
-      setTimeout(() => {
-        love.remove();
-      }, 5000);
-    }
+      setTimeout(() => love.remove(), 5000);
+    }, 300);
+  }
+</script>
 
-    setInterval(createLove, 500);
-  </script>
+
 </body>
 </html>
