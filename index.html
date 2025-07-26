@@ -168,29 +168,24 @@
     document.getElementById('startButton').style.display = 'none';
     document.getElementById('bgMusic').play().catch(console.warn);
 
-    // Generate texts (hindari area tengah 30vw - 70vw untuk menghindari tabrakan dengan foto)
+    // Generate texts
     for (let i = 0; i < 25; i++) {
-      let leftPos;
-      do {
-        leftPos = Math.random() * 100;
-      } while (leftPos > 30 && leftPos < 70); // Hindari tengah
-
       const text = document.createElement('div');
       text.className = 'love-text';
       text.innerText = phrases[Math.floor(Math.random() * phrases.length)];
-      text.style.left = `${leftPos}vw`;
+      text.style.left = `${Math.random() * 90}vw`;
       text.style.top = `-${Math.random() * 200}px`;
       text.style.fontSize = `${Math.random() * 1.5 + 1}em`;
       text.style.animationDelay = `${Math.random() * 5}s`;
       document.body.appendChild(text);
     }
 
-    // Generate photos (jatuh di area tengah 40vw - 60vw)
+    // Generate photos
     for (let i = 0; i < photos.length; i++) {
       const img = document.createElement('img');
       img.src = photos[i];
       img.className = 'photo-drop';
-      img.style.left = `${40 + Math.random() * 20}vw`;
+      img.style.left = `${Math.random() * 90}vw`;
       img.style.top = `-${Math.random() * 400}px`;
       img.style.animationDelay = `${Math.random() * 6}s`;
       document.body.appendChild(img);
@@ -208,7 +203,6 @@
     }, 300);
   }
 </script>
-
 
 </body>
 </html>
