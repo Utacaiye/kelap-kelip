@@ -169,16 +169,27 @@
     document.getElementById('bgMusic').play().catch(console.warn);
 
     // Generate texts
-    for (let i = 0; i < 25; i++) {
-      const text = document.createElement('div');
-      text.className = 'love-text';
-      text.innerText = phrases[Math.floor(Math.random() * phrases.length)];
-      text.style.left = `${Math.random() * 90}vw`;
-      text.style.top = `-${Math.random() * 200}px`;
-      text.style.fontSize = `${Math.random() * 1.5 + 1}em`;
-      text.style.animationDelay = `${Math.random() * 5}s`;
-      document.body.appendChild(text);
-    }
+    // Generate texts satu per satu agar tidak menumpuk
+let textCount = 0;
+const maxText = 30;
+const textInterval = setInterval(() => {
+  if (textCount >= maxText) {
+    clearInterval(textInterval);
+    return;
+  }
+
+  const text = document.createElement('div');
+  text.className = 'love-text';
+  text.innerText = phrases[Math.floor(Math.random() * phrases.length)];
+  text.style.left = `${Math.random() * 90}vw`;
+  text.style.top = `-${Math.random() * 200}px`;
+  text.style.fontSize = `${Math.random() * 1.5 + 1}em`;
+  text.style.animationDelay = `${Math.random() * 3}s`;
+  document.body.appendChild(text);
+
+  textCount++;
+}, 600); // Ubah interval di sini (600ms)
+
 
     // Generate photos
     for (let i = 0; i < photos.length; i++) {
