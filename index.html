@@ -20,6 +20,7 @@
       user-select: none;
       animation: rainText 6s linear infinite;
       text-shadow: 0 0 10px #00ffff;
+      z-index: 2;
     }
 
     @keyframes rainText {
@@ -44,6 +45,7 @@
       border-radius: 10px;
       box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
       animation: dropPhoto 8s ease-in-out infinite;
+      z-index: 1;
     }
 
     @keyframes dropPhoto {
@@ -56,6 +58,23 @@
       }
       100% {
         transform: translateY(110vh) rotate(10deg);
+        opacity: 0;
+      }
+    }
+
+    .love {
+      position: fixed;
+      top: -2em;
+      pointer-events: none;
+      animation: fall 5s linear forwards;
+      opacity: 0.3;
+      filter: blur(1px);
+      z-index: 0;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(100vh);
         opacity: 0;
       }
     }
@@ -171,6 +190,17 @@
       img.style.animationDelay = `${Math.random() * 6}s`;
       document.body.appendChild(img);
     }
+
+    // Generate love hearts
+    setInterval(() => {
+      const love = document.createElement("div");
+      love.classList.add("love");
+      love.innerHTML = "❤️";
+      love.style.left = Math.random() * 100 + "vw";
+      love.style.fontSize = (16 + Math.random() * 20) + "px";
+      document.body.appendChild(love);
+      setTimeout(() => love.remove(), 5000);
+    }, 300);
   }
 </script>
 
